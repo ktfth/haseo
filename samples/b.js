@@ -1,4 +1,11 @@
 const fruits = [
+  'apple',
   'banana',
-  'grape',
+  'cherry',
+  'orange',
+  'water melon',
+  'cranberry',
 ];
+
+console.log('b');
+console.log('d');

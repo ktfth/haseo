@@ -25,6 +25,11 @@ fn main() -> std::io::Result<()> {
 
     let max_len_between_files = cmp::max(left_lines.len(), right_lines.len());
 
+    let mut left_compared_lines: Vec<String> = Vec::new();
+    let mut right_compared_lines: Vec<String> = Vec::new();
+
+    let mut combo = 0;
+
     for i in 0..max_len_between_files {
         let mut left_line = "";
         let mut right_line = "";
@@ -37,34 +42,50 @@ fn main() -> std::io::Result<()> {
             right_line = right_lines[i];
         }
 
-        let mut left_compared_lines: Vec<String> = Vec::new();
-        let mut both_compared_lines: Vec<String> = Vec::new();
-        let mut right_compared_lines: Vec<String> = Vec::new();
-
         let plus_sign = "+".green();
         let minus_sign = "-".red();
 
         if left_line == right_line {
-            both_compared_lines.push(left_line.to_owned().to_string());
+            if combo > 0 {
+                for line in &left_compared_lines {
+                    println!("{}", line);
+                }
+        
+                for line in &right_compared_lines {
+                    println!("{}", line);
+                }
+
+                left_compared_lines.clear();
+                right_compared_lines.clear();
+                
+                combo = 0;
+            }
+            println!("{}", left_line.to_owned().to_string());
         } else if !left_line.is_empty() && !right_line.is_empty() && left_line != right_line {
             left_compared_lines.push(format!("{}{}", minus_sign, left_line.to_owned().red()));
             right_compared_lines.push(format!("{}{}", plus_sign, right_line.to_owned().green()));
+            combo += 1;
         } else if !left_line.is_empty() {
             left_compared_lines.push(format!("{}{}", minus_sign, left_line.to_owned().red()));
+            combo += 1;
         } else if !right_line.is_empty() {
             right_compared_lines.push(format!("{}{}", plus_sign, right_line.to_owned().green()));
+            combo += 1;
         }
 
-        for line in left_compared_lines {
-            println!("{}", line);
-        }
+        if i == max_len_between_files - 1 && combo > 0 {
+            for line in &left_compared_lines {
+                println!("{}", line);
+            }
+    
+            for line in &right_compared_lines {
+                println!("{}", line);
+            }
 
-        for line in both_compared_lines {
-            println!("{}", line);
-        }
-
-        for line in right_compared_lines {
-            println!("{}", line);
+            left_compared_lines.clear();
+            right_compared_lines.clear();
+            
+            combo = 0;
         }
     }
 

@@ -6,3 +6,5 @@ const fruits = [
   'elderberry',
   'fig',
 ];
+
+console.log('a');
